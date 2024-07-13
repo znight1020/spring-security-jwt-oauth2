@@ -8,8 +8,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.CorsFilter;
 import training.ex.auth.service.CustomOAuth2UserService;
 import training.ex.jwt.JWTFilter;
 import training.ex.jwt.JWTUtil;
@@ -19,11 +21,12 @@ import training.ex.oauth2.handler.CustomSuccessHandler;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class
-SecurityConfig {
+public class SecurityConfig {
     private final CustomSuccessHandler customSuccessHandler;
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final CorsFilter corsFilter;
     private final JWTUtil jwtUtil;
+
 
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
@@ -40,7 +43,8 @@ SecurityConfig {
                                 .loginProcessingUrl("/login")
                                 .defaultSuccessUrl("/")
                 )
-                .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
+                .addFilter(corsFilter)
+                .addFilterAfter(new JWTFilter(jwtUtil), OAuth2LoginAuthenticationFilter.class)
                 .oauth2Login((oauth2) -> oauth2
                         .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig
                                 .userService(customOAuth2UserService))
