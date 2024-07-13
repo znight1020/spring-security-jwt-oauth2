@@ -9,7 +9,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import training.ex.auth.service.CustomOAuth2UserService;
+import training.ex.jwt.JWTFilter;
+import training.ex.jwt.JWTUtil;
+import training.ex.oauth2.handler.CustomSuccessHandler;
 
 @Slf4j
 @Configuration
@@ -17,8 +21,9 @@ import training.ex.auth.service.CustomOAuth2UserService;
 @RequiredArgsConstructor
 public class
 SecurityConfig {
-
+    private final CustomSuccessHandler customSuccessHandler;
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final JWTUtil jwtUtil;
 
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
@@ -35,9 +40,11 @@ SecurityConfig {
                                 .loginProcessingUrl("/login")
                                 .defaultSuccessUrl("/")
                 )
+                .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
                 .oauth2Login((oauth2) -> oauth2
                         .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig
                                 .userService(customOAuth2UserService))
+                        .successHandler(customSuccessHandler)
                 )
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

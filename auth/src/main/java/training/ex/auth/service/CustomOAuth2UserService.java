@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import training.ex.auth.dto.*;
 import training.ex.auth.model.User;
 import training.ex.auth.repository.UserRepository;
-import training.ex.dto.*;
 
 import java.util.UUID;
 
