@@ -1,10 +1,13 @@
 package training.ex.dto;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class GithubResponse implements OAuth2Response {
-    private final Map<String, Object> attributes = new HashMap<>();
+    private final Map<String, Object> attributes;
+
+    public GithubResponse(Map<String, Object> attributes) {
+        this.attributes = attributes;
+    }
 
     @Override
     public String getProvider() {
