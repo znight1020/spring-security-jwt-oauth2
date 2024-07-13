@@ -16,7 +16,8 @@ import training.ex.service.CustomOAuth2UserService;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig {
+public class
+SecurityConfig {
 
     private final CustomOAuth2UserService customOAuth2UserService;
 

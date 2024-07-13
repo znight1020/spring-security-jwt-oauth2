@@ -8,6 +8,8 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import training.ex.dto.*;
 
+import java.util.UUID;
+
 @Slf4j
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
@@ -31,8 +33,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
 
         User user = new User();
+        user.setUserUuid(UUID.randomUUID().toString());
         user.setSocialProvider(oAuth2Response.getProvider());
-        user.setUserName(oAuth2User.getName());
+        user.setUsername(oAuth2User.getName());
         user.setUserEmail(oAuth2Response.getEmail());
         user.setRole("ROLE_USER");
 

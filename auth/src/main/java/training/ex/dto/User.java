@@ -12,7 +12,7 @@ public class User {
     private String userUuid;
     private String userEmail;
     private String userPassword;
-    private String userName;
+    private String username;
     private String userStatus;
     private String socialProvider;
     private String role;
