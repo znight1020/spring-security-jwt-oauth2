@@ -6,10 +6,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import training.ex.dto.GithubResponse;
-import training.ex.dto.GoogleResponse;
-import training.ex.dto.NaverResponse;
-import training.ex.dto.OAuth2Response;
+import training.ex.dto.*;
 
 @Slf4j
 @Service
@@ -29,7 +26,16 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             oAuth2Response = new GoogleResponse(oAuth2User.getAttributes());
         } else if("github".equals(registrationId)) {
             oAuth2Response = new GithubResponse(oAuth2User.getAttributes());
+        } else {
+            return null;
         }
-        return null;
+
+        User user = new User();
+        user.setSocialProvider(oAuth2Response.getProvider());
+        user.setUserName(oAuth2User.getName());
+        user.setUserEmail(oAuth2Response.getEmail());
+        user.setRole("ROLE_USER");
+
+        return new CustomOAuth2User(user, oAuth2User.getAttributes());
     }
 }
