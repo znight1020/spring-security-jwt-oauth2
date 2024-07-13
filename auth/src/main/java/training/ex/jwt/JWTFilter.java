@@ -24,12 +24,22 @@ public class JWTFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token = getToken(request, response, filterChain);
+        Cookie[] cookies = request.getCookies();
+        String authorization = null;
 
-        if(token.isEmpty()) {
+        for(Cookie cookie : cookies) {
+            if(cookie.getName().equals("Authorization")) {
+                authorization = cookie.getValue();
+            }
+        }
+
+        if(authorization == null) {
+            log.info("토큰이 없습니다.");
             filterChain.doFilter(request, response);
             return;
         }
+
+        String token = authorization;
 
         if(isExpired(token)) {
             filterChain.doFilter(request, response);
@@ -53,24 +63,6 @@ public class JWTFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authToken);
 
         filterChain.doFilter(request, response);
-    }
-
-    private String getToken(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
-        Cookie[] cookies = request.getCookies();
-        String token = null;
-
-        for(Cookie cookie : cookies) {
-            log.info(cookie.getName());
-            if(cookie.getName().equals("Authorization")) {
-                token = cookie.getValue();
-            }
-        }
-
-        if(token == null) {
-            log.info("토큰이 없습니다.");
-        }
-
-        return token;
     }
 
     private boolean isExpired(String token){
