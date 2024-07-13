@@ -1,4 +1,4 @@
-package training.ex.dto;
+package training.ex.auth.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

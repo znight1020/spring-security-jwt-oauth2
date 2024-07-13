@@ -1,22 +1,22 @@
-package training.ex.dto;
+package training.ex.auth.dto;
 
 import java.util.Map;
 
-public class GoogleResponse implements OAuth2Response{
+public class GithubResponse implements OAuth2Response {
     private final Map<String, Object> attributes;
 
-    public GoogleResponse(Map<String, Object> attributes) {
+    public GithubResponse(Map<String, Object> attributes) {
         this.attributes = attributes;
     }
 
     @Override
     public String getProvider() {
-        return "google";
+        return "github";
     }
 
     @Override
     public String getProviderId() {
-        return attributes.get("sub").toString();
+        return attributes.get("id").toString();
     }
 
     @Override
@@ -29,4 +29,3 @@ public class GoogleResponse implements OAuth2Response{
         return attributes.get("name").toString();
     }
 }
-

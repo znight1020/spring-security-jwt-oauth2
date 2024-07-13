@@ -1,17 +1,17 @@
-package training.ex.dto;
+package training.ex.auth.dto;
 
 import java.util.Map;
 
-public class GithubResponse implements OAuth2Response {
+public class NaverResponse implements OAuth2Response {
     private final Map<String, Object> attributes;
 
-    public GithubResponse(Map<String, Object> attributes) {
-        this.attributes = attributes;
+    public NaverResponse(Map<String, Object> attributes) {
+        this.attributes = (Map<String, Object>) attributes.get("response");
     }
 
     @Override
     public String getProvider() {
-        return "github";
+        return "naver";
     }
 
     @Override

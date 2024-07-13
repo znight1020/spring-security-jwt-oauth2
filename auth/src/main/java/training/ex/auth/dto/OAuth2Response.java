@@ -1,4 +1,4 @@
-package training.ex.dto;
+package training.ex.auth.dto;
 
 public interface OAuth2Response {
     String getProvider(); // 제공자
